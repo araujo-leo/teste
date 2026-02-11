@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Model\UserModel;
+use App\Middleware\AuthMiddleware;
 
 class AuthController extends BaseController
 {
@@ -21,7 +22,8 @@ class AuthController extends BaseController
             $user = UserModel::register($data['name'], $data['email'], $data['password']);
             if($user) {
                 $this->jsonResponse([
-                    'success' => true
+                    'success' => true,
+                    'message' => 'User registered successfully'
                 ], 201);
             } else {
                 $this->jsonResponse([
@@ -50,7 +52,8 @@ class AuthController extends BaseController
             if($token) {
                 $this->jsonResponse([
                     'success' => true,
-                    'token' => $token
+                    'token' => $token,
+                    'message' => 'Login successful'
                 ], 200);
             } else {
                 $this->jsonResponse([
@@ -61,5 +64,19 @@ class AuthController extends BaseController
         }catch (\Exception $e){
             $this->jsonResponse(['error' => 'Login failed: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function me(): void
+    {
+        $user = AuthMiddleware::require();
+
+        $this->jsonResponse([
+            'success' => true,
+            'user' => [
+                'id' => $user['user_id'],
+                'name' => $user['name'],
+                'email' => $user['email']
+            ]
+        ], 200);
     }
 }

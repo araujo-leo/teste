@@ -38,7 +38,7 @@ class SupplierModel
         return $stmt->execute();
     }
 
-    public static function update(int $id,string $cnpj,string $companyName,string $email,string $phone,string $status)
+    public static function update(int $id,string $cnpj,string $companyName,string $email,string $phone,string $status) :bool
     {
         $pdo = Database::getConnection();
         $sql = "UPDATE suppliers SET cnpj = :cnpj, company_name = :companyName, email = :email, phone = :phone, status = :status WHERE id = :id";

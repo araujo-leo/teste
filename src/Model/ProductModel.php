@@ -23,7 +23,7 @@ class ProductModel
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
-    public static function create($code, $name, $description, $price, $status) :bool
+    public static function create(int $code,string $name,string $description,float $price,string $status) :bool
     {
         $pdo = Database::getConnection();
         $sql = "INSERT INTO products (internal_code, name, description, price, status) VALUES (:code, :name, :description, :price, :status)";
@@ -37,7 +37,7 @@ class ProductModel
         return $stmt->execute();
     }
 
-    public static function update($id, $code, $name, $description, $price, $status) :bool
+    public static function update(int $id,string $code,string $name,string $description,float $price,string $status) :bool
     {
         $pdo = Database::getConnection();
         $sql = "UPDATE products SET  internal_code = :code, name = :name, description = :description, price = :price, status = :status WHERE id = :id";

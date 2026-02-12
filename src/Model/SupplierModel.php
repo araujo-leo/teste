@@ -13,7 +13,18 @@ class SupplierModel
         $stmt = $pdo->query($sql);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-    public static function create($cnpj, $name, $email, $phone, $status) :bool
+
+    public static function getById(int $id) :array
+    {
+        $pdo = Database::getConnection();
+        $sql = "SELECT * FROM suppliers WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
+
+    public static function create(string $cnpj, string $name, string $email, string $phone, string $status) :bool
     {
         $pdo = Database::getConnection();
         $sql = "INSERT INTO suppliers (cnpj, company_name, email, phone, status) VALUES (:cnpj, :name, :email, :phone, :status)";
@@ -23,6 +34,21 @@ class SupplierModel
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':phone', $phone);
         $stmt->bindValue(':status', $status);
+
+        return $stmt->execute();
+    }
+
+    public static function update(int $id,string $cnpj,string $companyName,string $email,string $phone,string $status)
+    {
+        $pdo = Database::getConnection();
+        $sql = "UPDATE suppliers SET cnpj = :cnpj, company_name = :companyName, email = :email, phone = :phone, status = :status WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':cnpj', $cnpj);
+        $stmt->bindValue(':companyName', $companyName);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':phone', $phone);
+        $stmt->bindValue(':status', $status);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
 
         return $stmt->execute();
     }

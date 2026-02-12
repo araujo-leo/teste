@@ -50,4 +50,44 @@ class SupplierController extends BaseController
             $this->jsonResponse(['error' => 'Failed to create supplier: ' . $e->getMessage()], 500);
         }
     }
+
+    public function update(int $id) :array
+    {
+        $data = $this->getJsonInput();
+
+        $currentSupplier = SupplierModel::getById($id);
+
+        if (!$currentSupplier) {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => 'Supplier not found'
+            ], 404);
+        }
+
+        $cnpj = $data['cnpj'] ?? $currentSupplier['cnpj'];
+        $companyName = $data['company_name'] ?? $currentSupplier['company_name'];
+        $email = $data['email'] ?? $currentSupplier['email'];
+        $phone = $data['phone'] ?? $currentSupplier['phone'];
+        $status = $data['status'] ?? $currentSupplier['status'];
+
+        try {
+            $updated = SupplierModel::update($id, $cnpj, $companyName, $email, $phone, $status);
+            if(!$updated){
+                return $this->jsonResponse([
+                    'success'  => false,
+                    'message' => 'Failed to update supplier'
+                ]);
+            }
+
+            return $this->jsonResponse([
+                'success' => true,
+                'message' => 'Supplier updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => 'Error updating supplier: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

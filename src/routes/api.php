@@ -16,4 +16,5 @@ $router->put('/api/supplier/{id}', [SupplierController::class, 'update']);
 
 $router->get('/api/products', [ProductController::class, 'index']);
 $router->post('/api/product', [ProductController::class, 'create']);
+$router->put('/api/product/{id}', [ProductController::class, 'update']);
 

@@ -11,13 +11,13 @@ class ProductController extends BaseController
         $products = ProductModel::getAll();
 
         if(empty($products)) {
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => false,
                 'message' => 'No products found'
             ], 404);
         }
 
-        return $this->jsonResponse([
+        $this->jsonResponse([
             'success' => true,
             'data' => $products
         ]);
@@ -42,7 +42,7 @@ class ProductController extends BaseController
                 ], 500);
             }
 
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => true,
                 'message' => 'Product created successfully'
             ], 201);
@@ -50,4 +50,46 @@ class ProductController extends BaseController
             $this->jsonResponse(['error' => 'Failed to create product: ' . $e->getMessage()], 500);
         }
     }
+
+    public function update(int $id) :void
+    {
+        $data = $this->getJsonInput();
+
+        $currentProduct = ProductModel::getById($id);
+
+        if (!$currentProduct) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Product not found'
+            ], 404);
+        }
+
+        $code = $data['internal_code'] ?? $currentProduct['internal_code'];
+        $name = $data['name'] ?? $currentProduct['name'];
+        $description = $data['description'] ?? $currentProduct['description'];
+        $price = $data['price'] ?? $currentProduct['price'];
+        $status = $data['status'] ?? $currentProduct['status'];
+
+        try {
+            $updated = ProductModel::update($id,$code, $name, $description, $price, $status);
+            if(!$updated){
+                $this->jsonResponse([
+                    'success'  => false,
+                    'message' => 'Failed to update supplier'
+                ]);
+            }
+
+            $this->jsonResponse([
+                'success' => true,
+                'message' => 'Product updated successfully'
+            ]);
+        } catch (\Exception $e) {
+            $this->jsonResponse([
+                'success' => false,
+                'message' => 'Error updating supplier: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
 }

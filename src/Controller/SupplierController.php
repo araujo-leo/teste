@@ -6,23 +6,23 @@ use App\Model\SupplierModel;
 
 class SupplierController extends BaseController
 {
-    public function index() :array
+    public function index() :void
     {
         $suppliers = SupplierModel::getAll();
 
         if(empty($suppliers)) {
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => false,
                 'message' => 'No suppliers found'
             ], 404);
         }
 
-        return $this->jsonResponse([
+        $this->jsonResponse([
             'success' => true,
             'data' => $suppliers
         ]);
     }
-    public function create() :array
+    public function create() :void
     {
         $data = $this->getJsonInput();
 
@@ -51,14 +51,14 @@ class SupplierController extends BaseController
         }
     }
 
-    public function update(int $id) :array
+    public function update(int $id) :void
     {
         $data = $this->getJsonInput();
 
         $currentSupplier = SupplierModel::getById($id);
 
         if (!$currentSupplier) {
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => false,
                 'message' => 'Supplier not found'
             ], 404);
@@ -73,18 +73,18 @@ class SupplierController extends BaseController
         try {
             $updated = SupplierModel::update($id, $cnpj, $companyName, $email, $phone, $status);
             if(!$updated){
-                return $this->jsonResponse([
+                $this->jsonResponse([
                     'success'  => false,
                     'message' => 'Failed to update supplier'
                 ]);
             }
 
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => true,
                 'message' => 'Supplier updated successfully'
             ]);
         } catch (\Exception $e) {
-            return $this->jsonResponse([
+            $this->jsonResponse([
                 'success' => false,
                 'message' => 'Error updating supplier: ' . $e->getMessage()
             ], 500);

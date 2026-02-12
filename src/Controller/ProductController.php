@@ -6,7 +6,7 @@ use App\Model\ProductModel;
 
 class ProductController extends BaseController
 {
-    public function index() :array
+    public function index() :void
     {
         $products = ProductModel::getAll();
 
@@ -22,7 +22,7 @@ class ProductController extends BaseController
             'data' => $products
         ]);
     }
-    public function create() :array
+    public function create() :void
     {
         $data = $this->getJsonInput();
 

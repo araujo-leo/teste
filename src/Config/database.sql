@@ -37,5 +37,6 @@ CREATE TABLE supplier_products (
     product_id INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (supplier_id) REFERENCES suppliers(id),
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    FOREIGN KEY (product_id) REFERENCES products(id),
+    UNIQUE KEY unique_supplier_product (supplier_id, product_id)
 );

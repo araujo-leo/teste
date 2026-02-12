@@ -22,6 +22,11 @@ class Router
         $this->routes['PUT'][$path] = $callback;
     }
 
+    public function delete(string $path, array $callback): void
+    {
+        $this->routes['DELETE'][$path] = $callback;
+    }
+
     public function dispatch()
     {
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

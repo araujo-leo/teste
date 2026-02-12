@@ -1,6 +1,7 @@
 <?php
 
 use App\Controller\AuthController;
+use App\Controller\ProductController;
 use App\Controller\SupplierController;
 
 
@@ -11,4 +12,7 @@ $router->get('/api/me', [AuthController::class, 'me']);
 
 $router->get('/api/suppliers', [SupplierController::class, 'index']);
 $router->post('/api/supplier', [SupplierController::class, 'create']);
+
+$router->get('/api/products', [ProductController::class, 'index']);
+$router->post('/api/product', [ProductController::class, 'create']);
 

@@ -9,6 +9,14 @@ class SupplierController extends BaseController
     public function index() :array
     {
         $suppliers = SupplierModel::getAll();
+
+        if(empty($suppliers)) {
+            return $this->jsonResponse([
+                'success' => false,
+                'message' => 'No suppliers found'
+            ], 404);
+        }
+
         return $this->jsonResponse([
             'success' => true,
             'data' => $suppliers

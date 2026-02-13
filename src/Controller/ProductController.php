@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\ProductModel;
 
 class ProductController extends BaseController
 {
+    public function productsPage() :string
+    {
+       return View::render('products/index');
+    }
     public function index() :void
     {
         $products = ProductModel::getAll();

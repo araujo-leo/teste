@@ -52,4 +52,33 @@ class SupplierModel
 
         return $stmt->execute();
     }
+
+    public static function exists(?string $cnpj = null, ?string $email = null): bool
+    {
+        $pdo = Database::getConnection();
+
+        $conditions = [];
+        $params = [];
+
+        if ($cnpj !== null) {
+            $conditions[] = 'cnpj = :cnpj';
+            $params[':cnpj'] = $cnpj;
+        }
+
+        if ($email !== null) {
+            $conditions[] = 'email = :email';
+            $params[':email'] = $email;
+        }
+
+        if (empty($conditions)) {
+            return false;
+        }
+
+        $sql = "SELECT 1 FROM suppliers WHERE " . implode(' OR ', $conditions) . " LIMIT 1";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute($params);
+
+        return (bool) $stmt->fetchColumn();
+    }
 }

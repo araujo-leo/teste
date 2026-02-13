@@ -33,6 +33,8 @@ class SupplierController extends BaseController
             ], 400);
         }
 
+        $this->validateData($data['cnpj'], $data['email'], $data['status']);
+
         try{
             $supplier = SupplierModel::create($data['cnpj'], $data['company_name'], $data['email'], $data['phone'], $data['status']);
             if($supplier) {
@@ -70,6 +72,8 @@ class SupplierController extends BaseController
         $phone = $data['phone'] ?? $currentSupplier['phone'];
         $status = $data['status'] ?? $currentSupplier['status'];
 
+        $this->validateData($cnpj, $email, $status);
+
         try {
             $updated = SupplierModel::update($id, $cnpj, $companyName, $email, $phone, $status);
             if(!$updated){
@@ -90,4 +94,38 @@ class SupplierController extends BaseController
             ], 500);
         }
     }
+
+    private function validateData(?string $cnpj = null, ?string $email = null, ?string $status = null): void
+    {
+        if ($cnpj !== null && strlen($cnpj) !== 18) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Invalid CNPJ format.'
+            ], 400);
+        }
+
+        if ($email !== null && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Invalid email format'
+            ], 400);
+        }
+
+        if ($status !== null && !in_array($status, ['active', 'inactive'])) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Status must be either active or inactive'
+            ], 400);
+        }
+
+        if ($cnpj !== null || $email !== null) {
+            if (SupplierModel::exists($cnpj, $email)) {
+                $this->jsonResponse([
+                    'success' => false,
+                    'error' => 'Supplier already exists'
+                ], 409);
+            }
+        }
+    }
+
 }

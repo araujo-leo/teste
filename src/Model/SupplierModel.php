@@ -6,7 +6,7 @@ use App\Config\Database;
 
 class SupplierModel
 {
-    public static function getAll() :array
+    public static function getAll() :?array
     {
         $pdo = Database::getConnection();
         $sql = "SELECT * FROM suppliers";
@@ -14,14 +14,18 @@ class SupplierModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function getById(int $id) :array
+    public static function getById(int $id): ?array
     {
         $pdo = Database::getConnection();
+
         $sql = "SELECT * FROM suppliers WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result ?: null;
     }
 
     public static function create(string $cnpj, string $name, string $email, string $phone, string $status) :bool

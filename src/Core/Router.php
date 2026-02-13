@@ -6,25 +6,30 @@ use App\Controller\ErrorController;
 class Router
 {
     private array $routes = [];
+    private array $middlewares = [];
 
-    public function get(string $path, array $callback): void
+    public function get(string $path, array $callback, array $middlewares = []): void
     {
         $this->routes['GET'][$path] = $callback;
+        $this->middlewares['GET'][$path] = $middlewares;
     }
 
-    public function post(string $path, array $callback): void
+    public function post(string $path, array $callback, array $middlewares = []): void
     {
         $this->routes['POST'][$path] = $callback;
+        $this->middlewares['POST'][$path] = $middlewares;
     }
 
-    public function put(string $path, array $callback): void
+    public function put(string $path, array $callback, array $middlewares = []): void
     {
         $this->routes['PUT'][$path] = $callback;
+        $this->middlewares['PUT'][$path] = $middlewares;
     }
 
-    public function delete(string $path, array $callback): void
+    public function delete(string $path, array $callback, array $middlewares = []): void
     {
         $this->routes['DELETE'][$path] = $callback;
+        $this->middlewares['DELETE'][$path] = $middlewares;
     }
 
     public function dispatch()
@@ -41,6 +46,14 @@ class Router
 
                     if (preg_match($pattern, $uri, $matches)) {
                         array_shift($matches);
+                        // Executar middlewares antes do controller
+                        if (isset($this->middlewares[$method][$route]) && !empty($this->middlewares[$method][$route])) {
+                            foreach ($this->middlewares[$method][$route] as $middleware) {
+                                if (class_exists($middleware) && method_exists($middleware, 'require')) {
+                                    $middleware::require();
+                                }
+                            }
+                        }
 
                         if ($callback instanceof \Closure) {
                             echo call_user_func_array($callback, $matches);
@@ -72,3 +85,4 @@ class Router
         }
     }
 }
+

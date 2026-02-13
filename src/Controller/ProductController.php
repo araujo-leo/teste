@@ -33,6 +33,8 @@ class ProductController extends BaseController
             ], 400);
         }
 
+        $this->validateData($data['price'], $data['status'], $data['internal_code']);
+
         try {
             $product = ProductModel::create($data['internal_code'], $data['name'], $data['description'], $data['price'], $data['status']);
             if(!$product) {
@@ -70,6 +72,8 @@ class ProductController extends BaseController
         $price = $data['price'] ?? $currentProduct['price'];
         $status = $data['status'] ?? $currentProduct['status'];
 
+        $this->validateData($price, $status, $code);
+
         try {
             $updated = ProductModel::update($id,$code, $name, $description, $price, $status);
             if(!$updated){
@@ -91,5 +95,27 @@ class ProductController extends BaseController
         }
     }
 
+    private function validateData(float $price,string $status, string $code) :void
+    {
+        if($price <= 0) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Price must be greater than zero'
+            ], 400);
+        }
 
+        if($status !== 'active' && $status !== 'inactive') {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Status must be either active or inactive'
+            ], 400);
+        }
+
+        if(ProductModel::existsByInternalCode($code)) {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Internal code must be unique'
+            ], 400);
+        }
+    }
 }

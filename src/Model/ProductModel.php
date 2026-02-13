@@ -14,16 +14,20 @@ class ProductModel
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
-    public static function getById(int $id) :array
+    public static function getById(int $id): ?array
     {
         $pdo = Database::getConnection();
+
         $sql = "SELECT * FROM products WHERE id = :id";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        $result = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        return $result ?: null;
     }
-    public static function create(int $code,string $name,string $description,float $price,string $status) :bool
+    public static function create(string $code,string $name,string $description,float $price,string $status) :bool
     {
         $pdo = Database::getConnection();
         $sql = "INSERT INTO products (internal_code, name, description, price, status) VALUES (:code, :name, :description, :price, :status)";
@@ -51,6 +55,15 @@ class ProductModel
 
         return $stmt->execute();
     }
-    
+
+    public static function existsByInternalCode(string $code) :bool
+    {
+        $pdo = Database::getConnection();
+        $sql = "SELECT COUNT(*) FROM products WHERE internal_code = :code";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':code', $code);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
+    }
     
 }

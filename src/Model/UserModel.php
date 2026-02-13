@@ -53,7 +53,8 @@ class UserModel
             'exp' => $expirationTime,
             'user_id' => $user['id'],
             'email' => $user['email'],
-            'name' => $user['name']
+            'name' => $user['name'],
+            'isAdmin' => (int) ($user['isAdmin'] ?? 0)
         ];
 
         return JWT::encode($payload, $secretKey, 'HS256');

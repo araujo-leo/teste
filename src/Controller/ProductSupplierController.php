@@ -37,6 +37,13 @@ class ProductSupplierController extends BaseController
             ], 404);
         }
 
+        if($supplier['status'] !== 'active') {
+            $this->jsonResponse([
+                'success' => false,
+                'error' => 'Supplier is not active'
+            ], 400);
+        }
+
         try {
             $alreadyLinked = ProductSupplierModel::exists($productId, $supplierId);
             if ($alreadyLinked) {

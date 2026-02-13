@@ -85,4 +85,17 @@ class SupplierModel
 
         return (bool) $stmt->fetchColumn();
     }
+
+    public static function isActive(int $id): bool
+    {
+        $pdo = Database::getConnection();
+        $sql = "SELECT status FROM suppliers WHERE id = :id";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':id', $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        $status = $stmt->fetchColumn();
+
+        return $status === 'active';
+    }
 }

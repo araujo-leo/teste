@@ -46,7 +46,6 @@ class Router
 
                     if (preg_match($pattern, $uri, $matches)) {
                         array_shift($matches);
-                        // Executar middlewares antes do controller
                         if (isset($this->middlewares[$method][$route]) && !empty($this->middlewares[$method][$route])) {
                             foreach ($this->middlewares[$method][$route] as $middleware) {
                                 if (class_exists($middleware) && method_exists($middleware, 'require')) {

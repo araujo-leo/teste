@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\UserModel;
 use App\Middleware\AuthMiddleware;
 
 class AuthController extends BaseController
 {
-    public function register() :array
+    public function loginPage() :string
+    {
+        return View::render("auth/login");
+    }
+    public function register() :void
     {
         $data = $this->getJsonInput();
 
@@ -36,7 +41,7 @@ class AuthController extends BaseController
         }
     }
 
-    public function login() :array
+    public function login() :void
     {
         $data = $this->getJsonInput();
 
@@ -52,6 +57,7 @@ class AuthController extends BaseController
             if($token) {
                 $this->jsonResponse([
                     'success' => true,
+                    'user' => UserModel::findByEmail($data['email']),
                     'token' => $token,
                     'message' => 'Login successful'
                 ], 200);

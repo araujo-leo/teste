@@ -88,7 +88,7 @@ class UserModel
     {
         $pdo = Database::getConnection();
 
-        $sql = "SELECT id, name, email, created_at FROM users WHERE email = :email";
+        $sql = "SELECT id, name, email, isAdmin FROM users WHERE email = :email";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':email', $email);
         $stmt->execute();

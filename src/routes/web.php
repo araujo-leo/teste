@@ -1,16 +1,12 @@
 <?php
 use App\Core\Router;
-use App\Controller\FilmController;
-use App\Controller\CharacterController;
-use App\Controller\PlanetController;
-use App\Controller\SpeciesController;
-use App\Controller\StarshipController;
-use App\Controller\VehicleController;
 
+use App\Controller\AuthController;
 
+$router->get('/', [\App\Controller\ProductController::class, 'indexPage']);
+$router->get('/login', [AuthController::class, 'loginPage']);
+$router->get('/register', [AuthController::class, 'registerPage']);
 
-$router->get('/characters', [CharacterController::class, 'index']);
-$router->get('/characters/{id}', [CharacterController::class, 'show']);
 
 
 

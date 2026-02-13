@@ -2,7 +2,7 @@
 
     <style>
         body {
-            background-color: #0d0d0d;
+            background-color: white;
             color: #fff;
         }
 

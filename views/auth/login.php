@@ -1,14 +1,4 @@
 <?php include __DIR__ . '/../partials/header.php'; ?>
-    <div class="toast-container position-fixed top-0 end-0 p-3">
-        <div id="errorToast" class="toast align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body" id="toastMessage">
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
-        </div>
-    </div>
-
     <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 80vh;">
         <form>
             <h2 class="mb-4">Login</h2>
@@ -59,20 +49,6 @@
                 }
             });
         });
-
-        function showToast(message) {
-            const toastElement = document.getElementById('errorToast');
-            const messageElement = document.getElementById('toastMessage');
-
-            if (toastElement && messageElement) {
-                messageElement.textContent = message;
-                const toast = new bootstrap.Toast(toastElement);
-                toast.show();
-            } else {
-                console.error("Elementos do Toast não encontrados!");
-                alert(message);
-            }
-        }
     </script>
 
 <?php include __DIR__ . '/../partials/footer.php'; ?>

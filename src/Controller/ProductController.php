@@ -77,7 +77,7 @@ class ProductController extends BaseController
         $price = $data['price'] ?? $currentProduct['price'];
         $status = $data['status'] ?? $currentProduct['status'];
 
-        $this->validateData($price, $status, $code);
+        $this->validateData($price, $status, $code, $id);
 
         try {
             $updated = ProductModel::update($id,$code, $name, $description, $price, $status);
@@ -100,7 +100,7 @@ class ProductController extends BaseController
         }
     }
 
-    private function validateData(float $price,string $status, string $code) :void
+    private function validateData(float $price,string $status, string $code, ?int $excludeId = null) :void
     {
         if($price <= 0) {
             $this->jsonResponse([
@@ -116,7 +116,7 @@ class ProductController extends BaseController
             ], 400);
         }
 
-        if(ProductModel::existsByInternalCode($code)) {
+        if(ProductModel::existsByInternalCode($code, $excludeId)) {
             $this->jsonResponse([
                 'success' => false,
                 'error' => 'Internal code must be unique'

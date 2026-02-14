@@ -56,12 +56,21 @@ class ProductModel
         return $stmt->execute();
     }
 
-    public static function existsByInternalCode(string $code) :bool
+    public static function existsByInternalCode(string $code, ?int $excludeId = null) :bool
     {
         $pdo = Database::getConnection();
-        $sql = "SELECT COUNT(*) FROM products WHERE internal_code = :code";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':code', $code);
+
+        if ($excludeId !== null) {
+            $sql = "SELECT COUNT(*) FROM products WHERE internal_code = :code AND id != :excludeId";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':code', $code);
+            $stmt->bindValue(':excludeId', $excludeId, \PDO::PARAM_INT);
+        } else {
+            $sql = "SELECT COUNT(*) FROM products WHERE internal_code = :code";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(':code', $code);
+        }
+
         $stmt->execute();
         return $stmt->fetchColumn() > 0;
     }

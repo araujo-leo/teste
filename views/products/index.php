@@ -136,8 +136,8 @@
                             <td>${formattedPrice}</td>
                             <td class="text-muted small">${product.description || '-'}</td>
                             <td>
-                                <span class="badge rounded-pill ${product.status == 1 ? 'bg-success-subtle text-success border border-success' : 'bg-secondary-subtle text-secondary border border-secondary'}">
-                                    ${product.status == 1 ? 'Active' : 'Inactive'}
+                                <span class="badge rounded-pill ${product.status == "active" ? 'bg-success-subtle text-success border border-success' : 'bg-secondary-subtle text-secondary border border-secondary'}">
+                                    ${product.status == "active" ? 'Active' : 'Inactive'}
                                 </span>
                             </td>
                             <td class="text-end pe-4">${editAction}</td>
@@ -181,7 +181,7 @@
                 status: $('#productStatus').val()
             };
 
-            const url = id ? `/api/products/${id}` : '/api/product';
+            const url = id ? `/api/product/${id}` : '/api/product';
             const method = id ? 'PUT' : 'POST';
 
             $.ajax({

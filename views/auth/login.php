@@ -32,6 +32,8 @@
                     if (response.success) {
                         localStorage.setItem('auth_token', response.token);
                         localStorage.setItem('user', JSON.stringify(response.user));
+
+                        document.cookie = `auth_token=${response.token}; path=/; max-age=86400`;
                         window.location.href = '/';
                     } else {
                         showToast('false', 'response');

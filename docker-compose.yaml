@@ -1,39 +1,37 @@
 services:
-  starwars_app:
+  testepratico_app:
     build:
       context: .
       dockerfile: docker/php/Dockerfile
-    container_name: "starwars_app"
+    container_name: "testepratico_app"
+    user: "${UID}:${GID}"
     ports:
       - "8080:80"
     volumes:
       - ./:/var/www/html
     env_file:
-        - .env
-    depends_on:
-      - starwars_db
+      - .env
     networks:
-      - starwars_network
+      - app_network
 
-  starwars_db:
-    image: mysql:latest
-    container_name: "starwars_db"
+  testepratico:
+    image: mysql:8.0
+    container_name: "testepratico"
+    restart: always
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-starwars_db}
-      MYSQL_USER: ${DB_USERNAME:-starwars_user}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-starwars_pass}
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
       - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./docker/db/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - starwars_network
+      - app_network
 
 volumes:
-  db_data: {}
+  db_data:
 
 networks:
-    starwars_network:
-        driver: bridge
+  app_network:
+    driver: bridge

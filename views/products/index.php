@@ -146,7 +146,7 @@
                     $('#productsTableBody').html(html);
                 },
                 error: function(xhr) {
-                    showToast('false', 'Error loading products list.');
+                    showToast(false, 'Error loading products list.');
                     $('#productsTableBody').html('<tr><td colspan="6" class="text-center text-danger">Error loading data.</td></tr>');
                 }
             });

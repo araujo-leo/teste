@@ -142,7 +142,7 @@
                     $('#suppliersTableBody').html(html);
                 },
                 error: function(xhr) {
-                    showToast('Error loading suppliers list.');
+                    showToast(false, 'Error loading suppliers list.');
                     $('#suppliersTableBody').html('<tr><td colspan="6" class="text-center text-danger">Error loading data.</td></tr>');
                 }
             });
@@ -191,7 +191,7 @@
                     bootstrap.Modal.getInstance(document.getElementById('supplierModal')).hide();
                     const user = JSON.parse(localStorage.getItem('user') || '{}');
                     loadSuppliers(user.isAdmin == 1);
-                    showToast('Supplier saved successfully!');
+                    showToast(true, 'Supplier saved successfully!');
                 },
                 error: function(xhr) {
                     let msg = 'Error processing request.';
@@ -199,7 +199,7 @@
                         const res = JSON.parse(xhr.responseText);
                         msg = res.error || res.message || msg;
                     } catch(e){}
-                    showToast(msg);
+                    showToast(false,msg);
                 }
             });
         }

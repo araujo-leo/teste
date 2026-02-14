@@ -36,7 +36,7 @@
                         document.cookie = `auth_token=${response.token}; path=/; max-age=86400`;
                         window.location.href = '/';
                     } else {
-                        showToast('false', 'response');
+                        showToast(false, 'response');
                     }
                 },
                 error: function(xhr) {

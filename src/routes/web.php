@@ -6,7 +6,7 @@ use App\Controller\ProductController;
 use App\Controller\SupplierController;
 use App\Controller\ProductSupplierController;
 
-$router->get('/', [ProductController::class, 'indexPage']);
+$router->get('/', [ProductController::class, 'productsPage']);
 $router->get('/login', [AuthController::class, 'loginPage']);
 $router->get('/register', [AuthController::class, 'registerPage']);
 $router->get('/products', [ProductController::class, 'productsPage']);

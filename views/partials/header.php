@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Produtos e Fornecedores</title>
+    <title>Product & Supplier Management</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -66,7 +66,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="/">
-            <i class="bi bi-shield-check"></i> Gerenciamento
+            <i class="bi bi-shield-check"></i> Management
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
@@ -75,13 +75,13 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/products"><i class="bi bi-box"></i> Produtos</a>
+                    <a class="nav-link" href="/products"><i class="bi bi-box"></i> Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/suppliers"><i class="bi bi-building"></i> Fornecedores</a>
+                    <a class="nav-link" href="/suppliers"><i class="bi bi-building"></i> Suppliers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/links"><i class="bi bi-link-45deg"></i> Vínculos</a>
+                    <a class="nav-link" href="/links"><i class="bi bi-link-45deg"></i> Links</a>
                 </li>
             </ul>
 
@@ -89,14 +89,14 @@
                 <li class="nav-item dropdown" id="userDropdown" style="display: none;">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-person-circle fs-5 me-2"></i>
-                        <span id="userNameDisplay">Usuário</span>
+                        <span id="userNameDisplay">User</span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><span class="dropdown-item-text text-muted small" id="userEmailDisplay"></span></li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item text-danger" href="#" id="logoutBtn">
-                                <i class="bi bi-box-arrow-right me-2"></i> Sair
+                                <i class="bi bi-box-arrow-right me-2"></i> Logout
                             </a>
                         </li>
                     </ul>
@@ -104,7 +104,7 @@
 
                 <li class="nav-item" id="loginBtnNav">
                     <a class="nav-link" href="/login">
-                        <i class="bi bi-box-arrow-in-right"></i> Entrar no Sistema
+                        <i class="bi bi-box-arrow-in-right"></i> Sign In
                     </a>
                 </li>
             </ul>
@@ -115,7 +115,7 @@
 <div class="container main-content">
 
     <script>
-        function showToast(status , message) {
+        function showToast(status, message) {
             const toastElement = document.getElementById('errorToast');
             document.getElementById('toastMessage').textContent = message;
             if(status === true) {
@@ -151,7 +151,7 @@
                     $('#userDropdown').show();
                     $('#loginBtnNav').hide();
                 } catch (e) {
-                    console.error("Erro ao ler dados do usuário:", e);
+                    console.error("Error reading user data:", e);
                     localStorage.clear();
                 }
             } else {

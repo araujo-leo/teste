@@ -1,5 +1,7 @@
 <?php include __DIR__ . '/../partials/header.php'; ?>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h2 class="mb-0">Suppliers</h2>
@@ -87,6 +89,8 @@
 
     <script>
         $(document).ready(function() {
+            applyMasks();
+
             const user = JSON.parse(localStorage.getItem('user') || '{}');
             const isAdmin = (user.isAdmin == 1);
 
@@ -103,6 +107,22 @@
                 saveSupplier();
             });
         });
+
+        function applyMasks() {
+            $('#cnpj').mask('00.000.000/0000-00');
+
+            const phoneMask = function (val) {
+                return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+            };
+
+            const phoneOptions = {
+                onKeyPress: function(val, e, field, options) {
+                    field.mask(phoneMask.apply({}, arguments), options);
+                }
+            };
+
+            $('#phone').mask(phoneMask, phoneOptions);
+        }
 
         function loadSuppliers(isAdmin) {
             $.ajax({
@@ -156,10 +176,10 @@
             if (supplier) {
                 $('#modalTitle').html('<i class="bi bi-pencil me-2"></i>Edit Supplier');
                 $('#supplierId').val(supplier.id);
-                $('#cnpj').val(supplier.cnpj);
+                $('#cnpj').val(supplier.cnpj).trigger('input');
                 $('#companyName').val(supplier.company_name);
                 $('#email').val(supplier.email);
-                $('#phone').val(supplier.phone);
+                $('#phone').val(supplier.phone).trigger('input');
                 $('#status').val(supplier.status);
             } else {
                 $('#modalTitle').html('<i class="bi bi-plus-lg me-2"></i>New Supplier');
@@ -170,6 +190,7 @@
 
         function saveSupplier() {
             const id = $('#supplierId').val();
+
             const data = {
                 cnpj: $('#cnpj').val(),
                 company_name: $('#companyName').val(),

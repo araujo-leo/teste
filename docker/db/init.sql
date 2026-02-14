@@ -1,4 +1,4 @@
-CREATE DATABASE IF NOT EXISTS testepratico;
+CREATE DATABASE IF NOT EXISTS testepratico_db;
 
 USE testepratico;
 
@@ -40,3 +40,8 @@ CREATE TABLE supplier_products (
                                    FOREIGN KEY (product_id) REFERENCES products(id),
                                    UNIQUE KEY unique_supplier_product (supplier_id, product_id)
 );
+
+INSERT INTO users (name, email, password, isAdmin) VALUES
+('Admin User', 'admin@example.com', '$2y$12$906vl9vwxtoWlZluoiBV7O3WV0zSPHUgDiiwcucok15oxKdPOnVmC', TRUE),
+('Regular User', 'user@example.com', '$2y$12$906vl9vwxtoWlZluoiBV7O3WV0zSPHUgDiiwcucok15oxKdPOnVmC', FALSE);
+

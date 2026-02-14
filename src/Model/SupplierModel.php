@@ -57,7 +57,7 @@ class SupplierModel
         return $stmt->execute();
     }
 
-    public static function exists(?string $cnpj = null, ?string $email = null): bool
+    public static function exists(?string $cnpj = null, ?string $email = null, ?int $excludeId = null): bool
     {
         $pdo = Database::getConnection();
 
@@ -78,7 +78,14 @@ class SupplierModel
             return false;
         }
 
-        $sql = "SELECT 1 FROM suppliers WHERE " . implode(' OR ', $conditions) . " LIMIT 1";
+        $sql = "SELECT 1 FROM suppliers WHERE (" . implode(' OR ', $conditions) . ")";
+
+        if ($excludeId !== null) {
+            $sql .= " AND id != :excludeId";
+            $params[':excludeId'] = $excludeId;
+        }
+
+        $sql .= " LIMIT 1";
 
         $stmt = $pdo->prepare($sql);
         $stmt->execute($params);

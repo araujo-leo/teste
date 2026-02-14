@@ -77,7 +77,7 @@ class SupplierController extends BaseController
         $phone = $data['phone'] ?? $currentSupplier['phone'];
         $status = $data['status'] ?? $currentSupplier['status'];
 
-        $this->validateData($cnpj, $email, $status);
+        $this->validateData($cnpj, $email, $status, $id);
 
         try {
             $updated = SupplierModel::update($id, $cnpj, $companyName, $email, $phone, $status);
@@ -100,7 +100,7 @@ class SupplierController extends BaseController
         }
     }
 
-    private function validateData(?string $cnpj = null, ?string $email = null, ?string $status = null): void
+    private function validateData(?string $cnpj = null, ?string $email = null, ?string $status = null, ?int $excludeId = null): void
     {
         if ($cnpj !== null && strlen($cnpj) !== 18) {
             $this->jsonResponse([
@@ -124,7 +124,7 @@ class SupplierController extends BaseController
         }
 
         if ($cnpj !== null || $email !== null) {
-            if (SupplierModel::exists($cnpj, $email)) {
+            if (SupplierModel::exists($cnpj, $email, $excludeId)) {
                 $this->jsonResponse([
                     'success' => false,
                     'error' => 'Supplier already exists'

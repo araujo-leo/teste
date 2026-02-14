@@ -2,10 +2,15 @@
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\SupplierModel;
 
 class SupplierController extends BaseController
 {
+    public function suppliersPage() :string
+    {
+        return View::render('suppliers/index');
+    }
     public function index() :void
     {
         $suppliers = SupplierModel::getAll();

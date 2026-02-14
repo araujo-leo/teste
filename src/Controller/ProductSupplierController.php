@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
+use App\Core\View;
 use App\Model\ProductSupplierModel;
 use App\Model\ProductModel;
 use App\Model\SupplierModel;
 
 class ProductSupplierController extends BaseController
 {
+    public function linksPage(): string
+    {
+        return View::render('links/index');
+    }
     public function linkProductSupplier(): void
     {
         $data = $this->getJsonInput();

@@ -34,18 +34,17 @@
                         localStorage.setItem('user', JSON.stringify(response.user));
                         window.location.href = '/';
                     } else {
-                        showToast(response.message || response.error);
+                        showToast('false', 'response');
                     }
                 },
                 error: function(xhr) {
                     let errorMessage = 'Erro de conexão com o servidor.';
                     try {
-                        const response = JSON.parse(xhr.responseText);
-                        errorMessage = response.message || response.error || errorMessage;
+                        errorMessage = JSON.stringify(xhr.responseJSON.error).replace(/"/g, "");
                     } catch (e) {
                         console.error("Erro ao processar JSON:", e);
                     }
-                    showToast(errorMessage);
+                    showToast(false, errorMessage);
                 }
             });
         });

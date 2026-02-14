@@ -17,6 +17,7 @@
                     <tr>
                         <th class="ps-4">Internal Code</th>
                         <th>Product Name</th>
+                        <th>Price</th>
                         <th>Description</th>
                         <th>Status</th>
                         <th class="text-end pe-4" id="actionsHeader">Actions</th>
@@ -24,7 +25,7 @@
                     </thead>
                     <tbody id="productsTableBody">
                     <tr>
-                        <td colspan="5" class="text-center py-5">
+                        <td colspan="6" class="text-center py-5">
                             <div class="spinner-border text-primary" role="status"></div>
                             <br><span class="mt-2 d-block">Loading products...</span>
                         </td>
@@ -57,6 +58,14 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="productPrice" class="form-label fw-bold">Price</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" step="0.01" class="form-control" id="productPrice" placeholder="0.00" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="productDescription" class="form-label fw-bold">Description</label>
                             <textarea class="form-control" id="productDescription" rows="3" placeholder="Brief description..."></textarea>
                         </div>
@@ -64,8 +73,8 @@
                         <div class="mb-3">
                             <label for="productStatus" class="form-label fw-bold">Status</label>
                             <select class="form-select" id="productStatus">
-                                <option value="1">Active</option>
-                                <option value="0">Inactive</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
                             </select>
                         </div>
                     </div>
@@ -107,7 +116,7 @@
                     const products = response.data || response;
 
                     if (!products || products.length === 0) {
-                        $('#productsTableBody').html('<tr><td colspan="5" class="text-center py-4">No products found.</td></tr>');
+                        $('#productsTableBody').html('<tr><td colspan="6" class="text-center py-4">No products found.</td></tr>');
                         return;
                     }
 
@@ -118,10 +127,13 @@
                             </button>
                         ` : '';
 
+                        const formattedPrice = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price || 0);
+
                         html += `
                         <tr>
                             <td class="ps-4"><span class="badge bg-light text-dark border">#${product.internal_code}</span></td>
                             <td class="fw-bold">${product.name}</td>
+                            <td>${formattedPrice}</td>
                             <td class="text-muted small">${product.description || '-'}</td>
                             <td>
                                 <span class="badge rounded-pill ${product.status == 1 ? 'bg-success-subtle text-success border border-success' : 'bg-secondary-subtle text-secondary border border-secondary'}">
@@ -134,8 +146,8 @@
                     $('#productsTableBody').html(html);
                 },
                 error: function(xhr) {
-                    showToast('Error loading products list.');
-                    $('#productsTableBody').html('<tr><td colspan="5" class="text-center text-danger">Error loading data.</td></tr>');
+                    showToast('false', 'Error loading products list.');
+                    $('#productsTableBody').html('<tr><td colspan="6" class="text-center text-danger">Error loading data.</td></tr>');
                 }
             });
         }
@@ -149,6 +161,7 @@
                 $('#productId').val(product.id);
                 $('#internalCode').val(product.internal_code);
                 $('#productName').val(product.name);
+                $('#productPrice').val(product.price);
                 $('#productDescription').val(product.description);
                 $('#productStatus').val(product.status);
             } else {
@@ -163,12 +176,14 @@
             const data = {
                 internal_code: $('#internalCode').val(),
                 name: $('#productName').val(),
+                price: parseFloat($('#productPrice').val()),
                 description: $('#productDescription').val(),
-                status: parseInt($('#productStatus').val())
+                status: $('#productStatus').val()
             };
 
-            const url = id ? `/api/productsdd/${id}` : '/api/products/';
+            const url = id ? `/api/products/${id}` : '/api/product';
             const method = id ? 'PUT' : 'POST';
+
             $.ajax({
                 url: url,
                 method: method,
@@ -176,13 +191,10 @@
                 headers: { 'Authorization': 'Bearer ' + localStorage.getItem('auth_token') },
                 data: JSON.stringify(data),
                 success: function(response) {
-                    const modalEl = document.getElementById('productModal');
-                    bootstrap.Modal.getInstance(modalEl).hide();
-
+                    bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
                     const user = JSON.parse(localStorage.getItem('user') || '{}');
                     loadProducts(user.isAdmin == 1);
-
-                    showToast('Product saved successfully!');
+                    showToast(true, 'Product saved successfully!');
                 },
                 error: function(xhr) {
                     let msg = 'Error processing request.';
@@ -190,7 +202,7 @@
                         const res = JSON.parse(xhr.responseText);
                         msg = res.error || res.message || msg;
                     } catch(e){}
-                    showToast(msg);
+                    showToast(false, msg);
                 }
             });
         }

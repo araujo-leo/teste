@@ -115,9 +115,16 @@
 <div class="container main-content">
 
     <script>
-        function showToast(message) {
+        function showToast(status , message) {
             const toastElement = document.getElementById('errorToast');
             document.getElementById('toastMessage').textContent = message;
+            if(status === true) {
+                toastElement.classList.remove('bg-danger');
+                toastElement.classList.add('bg-success');
+            } else {
+                toastElement.classList.remove('bg-success');
+                toastElement.classList.add('bg-danger');
+            }
             if (typeof bootstrap !== 'undefined') {
                 const toast = new bootstrap.Toast(toastElement);
                 toast.show();
